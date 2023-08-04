@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fastapi-celery-poc"
+version = "0.1.0"
+description = "FastAPI with Celery tasks"
+authors = ["Mau Trigo <mtrigo143@gmail.com>"]
+readme = "README.md"
+packages = [{include = "fastapi_celery_poc"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+celery = {extras = ["redis"], version = "^5.3.1"}
+logzero = "^1.7.0"
+fastapi = "^0.100.1"
+uvicorn = {extras = ["standard"], version = "^0.23.2"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,21 +1,81 @@
 version: '3.8'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: tasks_runner_c
+    hostname: tasks_runner_c
+    restart: always
+    command: ./starter.sh --target fastapi
+    ports:
+      - 8000:8000
+    networks:
+      - silver_bullet
+
+  celery:
+    build:
+      context: .
+    container_name: celery_worker_c
+    hostname: celery_worker_c
+    command: ./starter.sh --target worker
+    depends_on:
+      - redis
+      - rabbitmq
+    networks:
+      - silver_bullet
+
+  flower:
+    build:
+      context: .
+    container_name: flower_c
+    hostname: flower_c
+    command: ./starter.sh --target flower
+    ports:
+      - 5555:5555
+    depends_on:
+      - app
+      - redis
+      - rabbitmq
+    networks:
+      - silver_bullet
+
   redis:
     image: redis:latest
     container_name: redis_c
     hostname: redis_c
     ports:
-      - "6379:6379"
+      - 6379:6379
     restart: always
     volumes:
       - redis_data:/data
     networks:
       - silver_bullet
 
+  rabbitmq:
+    container_name: rabbitmq_c
+    hostname: rabbitmq_c
+    image: rabbitmq:3.9.7-management
+    restart: always
+    ports:
+      - 7010:5672
+      - 7011:15672
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq:rw
+      - rabbitmq_logs:/var/log/rabbitmq:rw
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    networks:
+      - silver_bullet
+
 volumes:
   redis_data:
+  rabbitmq_data:
+  rabbitmq_logs:
 
 networks:
   silver_bullet:
     name: silver_bullet
+    driver: bridge

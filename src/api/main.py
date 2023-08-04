@@ -19,11 +19,13 @@ async def root():
 
 
 def start_server():
-    port_no = APP_SETTINGS.API_PORT
-    logger.info(f"Started server running on port: {port_no}")
+    logger.info(
+        f"Started server running on host: http://{APP_SETTINGS.API_HOST}:{APP_SETTINGS.API_PORT}"
+    )
     uvicorn.run(
         "src.api.main:app",
-        port=int(port_no),
+        host=APP_SETTINGS.API_HOST,
+        port=int(APP_SETTINGS.API_PORT),
         log_level="info",
         reload=True,
     )

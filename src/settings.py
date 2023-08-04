@@ -1,9 +1,9 @@
+import os
 from configparser import ConfigParser
 from functools import cache
 
 CONFIG_FILE_PATH_FOR_LOCAL = "config/application_conf.ini"
-
-"amqp://admin:admin@localhost:7010"
+CONFIG_FILE_PATH_FOR_DOCKER = "config/docker_application_conf.ini"
 
 
 @cache
@@ -11,6 +11,7 @@ class AppSettings:
     def __init__(self):
         self.settings = None
         self.setup()
+        self.API_HOST = self.settings.get("app", "api_host")
         self.API_PORT = self.settings.get("app", "api_port")
 
         self.REDIS_HOST = self.settings.get("messaging", "redis_host")
@@ -24,9 +25,17 @@ class AppSettings:
         self.DEFAULT_QUEUE = "celery_queue"
 
     def setup(self):
-        config_file_to_use = CONFIG_FILE_PATH_FOR_LOCAL
+        config_file = CONFIG_FILE_PATH_FOR_LOCAL
+        is_docker_env = os.getenv("DOCKER_ENV")
+
+        if is_docker_env:
+            print(f"Using docker config file {CONFIG_FILE_PATH_FOR_DOCKER}")
+            config_file = CONFIG_FILE_PATH_FOR_DOCKER
+        else:
+            print(f"Using local config file {CONFIG_FILE_PATH_FOR_LOCAL}")
+
         self.settings = ConfigParser()
-        self.settings.read(config_file_to_use)
+        self.settings.read(config_file)
 
 
 APP_SETTINGS = AppSettings()

@@ -19,7 +19,7 @@ class DivTask(BaseModel):
 class TaskRes(BaseModel):
     task_id: str
     task_status: str
-    task_result: int | float
+    task_result: int | float | None
 
 
 class TaskSent(BaseModel):

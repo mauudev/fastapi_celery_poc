@@ -19,8 +19,10 @@ services:
       context: .
     container_name: celery_worker_c
     hostname: celery_worker_c
+    restart: always
     command: ./starter.sh --target worker
     depends_on:
+      - app
       - redis
       - rabbitmq
     networks:
@@ -31,6 +33,8 @@ services:
       context: .
     container_name: flower_c
     hostname: flower_c
+    restart: always
+    # command: ["./wait-for-it.sh", "rabbitmq:5672", "--", "./starter.sh", "--target", "flower"]
     command: ./starter.sh --target flower
     ports:
       - 5555:5555
@@ -77,5 +81,4 @@ volumes:
 
 networks:
   silver_bullet:
-    name: silver_bullet
     driver: bridge

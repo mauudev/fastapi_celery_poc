@@ -1,5 +1,8 @@
+shell:
+	poetry shell
+
 install:
-	poetry shell; poetry install
+	poetry install
 
 run:
 	poetry run python src/api/main.py

@@ -32,6 +32,9 @@ poetry run celery -A src.api.main.celery flower --port=5555
 ```
 
 Then you can go to http://localhost:5555 to see the Flower UI application.
+## Using the application
+Once the containers is up, the API server is ready to receive task requests.
+Go to http://localhost:8000/docs to see all available endpoints to tryout. 
 
 ## Using docker compose
 Also is possible to start the whole stack using `docker compose`

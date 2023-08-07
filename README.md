@@ -34,7 +34,7 @@ poetry run celery -A src.api.main.celery flower --port=5555
 Then you can go to http://localhost:5555 to see the Flower UI application.
 
 ## Using docker compose
-Also is possible to start the whole stack using `docker-compose`
+Also is possible to start the whole stack using `docker compose`
 To do so, execute the following command:
 ```
 # On the main folder containing the file `docker-compose.yml`
